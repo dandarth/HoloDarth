@@ -2,7 +2,7 @@ const clientId = "typo17o14snn5x63zo9arsngh0bx5x"; // Seu Client ID da Twitch
 const accessToken = "xf1hmscyaxnb8eotmnl4hyv1sz86x1"; // 🚀 Substitua pelo OAuth Token gerado!
 const redirectUri = "https://dandarth.github.io/HoloDarth/"; // URL OAuth configurada
 
-const canaisFavoritos = ["canal1", "canal2", "canal3"];
+const canaisFavoritos = ["serenohope", "jappatv", "ig_dan_ig"];
 
 function carregarFavoritos() {
     canaisFavoritos.forEach((canal) => {
