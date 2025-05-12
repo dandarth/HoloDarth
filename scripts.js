@@ -2,49 +2,35 @@ const clientId = "typo17o14snn5x63zo9arsngh0bx5x"; // Seu Client ID da Twitch
 const accessToken = "xf1hmscyaxnb8eotmnl4hyv1sz86x1"; // 🚀 Substitua pelo OAuth Token gerado!
 const redirectUri = "https://dandarth.github.io/HoloDarth/"; // URL OAuth configurada
 
-const canaisFavoritos = ["serenohope", "jappatv", "ig_dan_ig"];
+// 🔹 Lista de canais favoritos **corrigida**
+const canaisFavoritos = ["serenohope", "ig_dan_ig", "jappatv"]; // 🔥 Substitua pelos nomes dos canais reais!
 
 function carregarFavoritos() {
+    document.getElementById('streamsContainer').innerHTML = ""; // 🔥 Garante que os canais anteriores são apagados antes de carregar
     canaisFavoritos.forEach((canal) => {
-        addStreamFavorito(canal);
+        addStream(canal);
     });
 }
 
-async function carregarEquipe() {
-    let teamName = prompt("Digite o nome da equipe da Twitch:");
-    if (!teamName) return;
+// 🔥 Corrigindo a função `addStream()` para funcionar corretamente!
+function addStream(canal) {
+    if (!canal) {
+        canal = document.getElementById('channelName').value.trim();
+    }
 
-    const url = `https://api.twitch.tv/helix/teams?name=${teamName}`;
-
-    const response = await fetch(url, {
-        headers: {
-            "Client-ID": clientId,
-            "Authorization": `Bearer ${accessToken}` // ✅ Token de acesso incluído corretamente
-        }
-    });
-
-    if (!response.ok) {
-        alert("Erro ao carregar equipe!");
+    if (!canal) {
+        alert("Por favor, insira um nome de canal válido!");
         return;
     }
 
-    const data = await response.json();
-    const membros = data.data[0].users.map(user => user.user_name);
-
-    membros.forEach((canal) => {
-        addStreamFavorito(canal);
-    });
-}
-
-function addStreamFavorito(channel) {
     let div = document.createElement("div"); 
     div.classList.add("stream-container");
 
     let iframe = document.createElement("iframe");
-    iframe.src = `https://player.twitch.tv/?channel=${channel}&parent=dandarth.github.io&muted=true`; // ✅ Configuração correta do parent
+    iframe.src = `https://player.twitch.tv/?channel=${canal}&parent=dandarth.github.io&muted=true`;
 
     let chatIframe = document.createElement("iframe");
-    chatIframe.src = `https://www.twitch.tv/embed/${channel}/chat?parent=dandarth.github.io`; // ✅ Corrigido para evitar erro de segurança
+    chatIframe.src = `https://www.twitch.tv/embed/${canal}/chat?parent=dandarth.github.io`;
     chatIframe.width = "100%";
     chatIframe.height = "400";
     chatIframe.frameBorder = "0";
@@ -52,7 +38,24 @@ function addStreamFavorito(channel) {
     div.appendChild(iframe);
     document.getElementById('streamsContainer').appendChild(div);
     document.getElementById('chatContainer').appendChild(chatIframe);
+
+    document.getElementById('channelName').value = ""; // 🔥 Limpa o campo de entrada após adicionar
 }
+
+// 🔥 Adicionando evento de "Enter" no campo de entrada
+document.getElementById("channelName").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        addStream();
+    }
+});
+
+// 🔥 Corrigindo o botão "Adicionar Stream"
+document.querySelector("button[onclick='addStream()']").addEventListener("click", function() {
+    addStream();
+});
+
+// 🔥 Atualiza as streams a cada 15 minutos
+setInterval(refreshStreams, 900000);
 
 function refreshStreams() {
     let iframes = document.querySelectorAll(".stream-container iframe:first-child");
@@ -73,6 +76,3 @@ function toggleChat() {
         toggleButton.innerText = "Ocultar Chat";
     }
 }
-
-// Atualiza as streams a cada 15 minutos
-setInterval(refreshStreams, 900000);
