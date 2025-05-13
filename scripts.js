@@ -6,7 +6,14 @@ const redirectUri = "https://dandarth.github.io/HoloDarth/"; // URL OAuth config
 const canaisFavoritos = ["serenohope", "ig_dan_ig", "jappatv"]; // 🔥 Substitua pelos nomes reais!
 
 function carregarFavoritos() {
-    document.getElementById('streamsContainer').innerHTML = ""; // 🔥 Limpa antes de carregar
+    let canaisSalvos = JSON.parse(localStorage.getItem("canaisFavoritos"));
+    
+    if (canaisSalvos) {
+        canaisFavoritos = canaisSalvos; // 🔥 Carrega os canais salvos
+    }
+
+    document.getElementById('streamsContainer').innerHTML = ""; // 🔥 Limpa a tela antes de carregar
+
     canaisFavoritos.forEach((canal) => {
         addStream(canal);
     });
@@ -78,3 +85,23 @@ function toggleChat() {
         toggleButton.innerText = "Ocultar Chat";
     }
 }
+
+function addFavoriteChannel() {
+    let canal = document.getElementById("favoriteChannel").value.trim();
+    
+    if (!canal) {
+        alert("Por favor, insira um nome de canal válido!");
+        return;
+    }
+
+    // 🔥 Adiciona o canal na lista de favoritos
+    canaisFavoritos.push(canal);
+    
+    // 🛠 Salva a lista no Local Storage
+    localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
+
+    alert(`Canal ${canal} adicionado aos favoritos!`);
+    document.getElementById("favoriteChannel").value = ""; // 🔥 Limpa o campo após adicionar
+}
+
+window.onload = carregarFavoritos;

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+HEAD
 body {
     font-family: Arial, sans-serif;
     background-color: #000000;
@@ -60,67 +60,12 @@ h1 {
     border: none;
     cursor: pointer;
     z-index: 1000;
-=======
-body {
-    font-family: Arial, sans-serif;
-    background-color: #000000;
-    color: #ffffff;
-}
+} 
 
-h1 {
-    color: #ff0000;
-    text-align: center;
-}
-
-.main-container {
-    flex-grow: 1;
-    text-align: center;
-    padding: 20px;
-    max-width: calc(100vw - 320px);
-}
-
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2px;
-}
-
-.stream-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #1a1a1a;
-    border-radius: 5px;
-    padding: 3px;
-    margin: 0;
-    width: calc(100% / 4 - 8px);
-}
-
-.chat-sidebar {
-    position: fixed;
-    right: 0;
-    width: 300px;
-    height: 100vh;
-    background-color: #1a1a1a;
-    padding: 10px;
-    border-left: 2px solid #ffffff;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease-in-out;
-    transform: translateX(0px);
-}
-
-#toggleChatButton {
-    position: fixed;
+#chatContainer {
+    position: absolute;
+    top: 50px; /* 🔥 Ajuste a posição para mover mais para cima */
     right: 10px;
-    top: 10px;
-    padding: 10px;
-    background-color: #ffffff;
-    color: #18181b;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
->>>>>>> 512c27a (Inicializando repositório Git)
+    width: 300px;
+    height: 500px; /* 🔥 Ajuste a altura conforme necessário */
 }
