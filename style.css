@@ -1,8 +1,7 @@
 HEAD
 body {
-    font-family: Arial, sans-serif;
-    background-color: #000000;
-    color: #ffffff;
+    background-color: #121212; /* 🔥 Garante fundo escuro */
+    color: white; /* 🔥 Ajusta o texto para ficar visível */
 }
 
 h1 {
