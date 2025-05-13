@@ -45,41 +45,6 @@ function addStream(canal) {
     document.getElementById('channelName').value = ""; // 🔥 Limpa o campo após adicionar
 }
 
-// 🔥 Adicionando evento de "Enter" no campo de entrada
-document.getElementById("channelName").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        addStream();
-    }
-});
-
-// 🔥 Botão de Adicionar Stream ajustado
-document.querySelector("button[onclick='addStream()']").addEventListener("click", function() {
-    addStream();
-});
-
-// 🔥 Atualiza as streams a cada 15 minutos
-setInterval(refreshStreams, 900000);
-
-function refreshStreams() {
-    let iframes = document.querySelectorAll(".stream-container iframe:first-child");
-    iframes.forEach((iframe) => {
-        iframe.src = iframe.src;
-    });
-}
-
-function toggleChat() {
-    let chatSidebar = document.getElementById("chatSidebar");
-    let toggleButton = document.getElementById("toggleChatButton");
-
-    if (chatSidebar.style.transform === "translateX(0px)" || chatSidebar.style.transform === "") {
-        chatSidebar.style.transform = "translateX(320px)";
-        toggleButton.innerText = "Mostrar Chat";
-    } else {
-        chatSidebar.style.transform = "translateX(0px)";
-        toggleButton.innerText = "Ocultar Chat";
-    }
-}
-
 // 🔹 Adicionar um canal favorito manualmente e salvar no Local Storage
 function addFavoriteChannel() {
     let canal = document.getElementById("favoriteChannel").value.trim();
@@ -89,17 +54,17 @@ function addFavoriteChannel() {
         return;
     }
 
-    // 🔥 Adiciona o canal na lista de favoritos
-    canaisFavoritos.push(canal);
-
-    // 🛠 Salva a lista no Local Storage
-    localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
-
-    alert(`Canal ${canal} adicionado aos favoritos!`);
+    // 🔥 Evita duplicação de favoritos
+    if (!canaisFavoritos.includes(canal)) {
+        canaisFavoritos.push(canal);
+        localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
+        alert(`Canal ${canal} adicionado aos favoritos!`);
+    } else {
+        alert("Esse canal já está nos favoritos!");
+    }
 
     // 🔥 Atualiza a lista na tela automaticamente
     carregarFavoritos();
-
     document.getElementById("favoriteChannel").value = ""; // 🔥 Limpa o campo após adicionar
 }
 
