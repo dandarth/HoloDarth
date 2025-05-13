@@ -64,8 +64,9 @@ h1 {
 
 #chatContainer {
     position: absolute;
-    top: 10px; /* 🔥 Ajuste a posição para mover mais para cima */
+    top: 10px; /* 🔥 Movendo o chat para o topo */
     right: 10px;
     width: 300px;
-    height: 500px; /* 🔥 Ajuste a altura conforme necessário */
+    height: 500px;
+    z-index: 1000; /* 🔥 Garantindo que ele fique sobre outros elementos */
 }
