@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -9,6 +8,8 @@
 </head>
 <body>
 
+    <!-- 🔥 Movendo o chat para o topo -->
+    <div id="chatContainer"></div>
     <button id="toggleChatButton" onclick="toggleChat()">Ocultar Chat</button>
 
     <div class="main-container">
@@ -18,10 +19,6 @@
         <button onclick="carregarFavoritos()">Carregar Canais Favoritos</button>
         <button onclick="carregarEquipe()">Carregar Equipe Twitch</button>
         <div class="container" id="streamsContainer"></div>
-    </div>
-
-    <div class="chat-sidebar" id="chatSidebar">
-        <div id="chatContainer"></div>
     </div>
 
     <script src="scripts.js"></script>
