@@ -35,7 +35,7 @@ function addStream(canal) {
     let iframe = document.createElement("iframe");
     iframe.src = `https://player.twitch.tv/?channel=${canal}&parent=dandarth.github.io&muted=true`;
     iframe.width = "100%";
-    iframe.height = "600"; // 🔥 Ajustando altura para exibir avisos corretamente
+    iframe.height = "500"; // 🔥 Ajustando altura para exibir avisos corretamente
     iframe.allowFullscreen = true;
 
     let chatIframe = document.createElement("iframe");
