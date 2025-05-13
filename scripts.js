@@ -38,11 +38,24 @@ function addStream(canal) {
     chatIframe.height = "500";
     chatIframe.frameBorder = "0";
 
+    let removeButton = document.createElement("button");
+    removeButton.innerText = "Remover Live";
+    removeButton.classList.add("remove-stream-btn"); // 🔥 Adicionando classe para estilização
+    removeButton.onclick = function() {
+        removerStream(div);
+    };
+
     div.appendChild(iframe);
+    div.appendChild(removeButton);
     document.getElementById('streamsContainer').appendChild(div);
     document.getElementById('chatContainer').appendChild(chatIframe);
 
-    document.getElementById('channelName').value = ""; // 🔥 Limpa o campo após adicionar
+    document.getElementById('channelName').value = "";
+}
+
+// 🔹 Função para remover a live da tela, mantendo na lista de favoritos
+function removerStream(streamDiv) {
+    streamDiv.remove(); // 🔥 Apenas remove a live exibida, sem alterar favoritos
 }
 
 // 🔹 Adicionar um canal favorito manualmente e salvar no Local Storage
