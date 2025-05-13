@@ -83,7 +83,15 @@ h1 {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+/* 🔥 Estilização do botão de remover live */
+.remove-stream-btn {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
 }
 .remove-stream-btn:hover {
     background-color: #cc0000;
-}
