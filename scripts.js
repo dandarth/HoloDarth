@@ -2,16 +2,10 @@ const clientId = "typo17o14snn5x63zo9arsngh0bx5x"; // Seu Client ID da Twitch
 const accessToken = "xf1hmscyaxnb8eotmnl4hyv1sz86x1"; // 🚀 Substitua pelo OAuth Token gerado!
 const redirectUri = "https://dandarth.github.io/HoloDarth/"; // URL OAuth configurada
 
-// 🔹 Lista de canais favoritos **corrigida**
-const canaisFavoritos = ["serenohope", "ig_dan_ig", "jappatv"]; // 🔥 Substitua pelos nomes reais!
+// 🔹 Carregar canais favoritos do Local Storage ou criar lista vazia
+let canaisFavoritos = JSON.parse(localStorage.getItem("canaisFavoritos")) || [];
 
 function carregarFavoritos() {
-    let canaisSalvos = JSON.parse(localStorage.getItem("canaisFavoritos"));
-    
-    if (canaisSalvos) {
-        canaisFavoritos = canaisSalvos; // 🔥 Carrega os canais salvos
-    }
-
     document.getElementById('streamsContainer').innerHTML = ""; // 🔥 Limpa a tela antes de carregar
 
     canaisFavoritos.forEach((canal) => {
@@ -29,13 +23,13 @@ function addStream(canal) {
         return;
     }
 
-    let div = document.createElement("div"); 
+    let div = document.createElement("div");
     div.classList.add("stream-container");
 
     let iframe = document.createElement("iframe");
     iframe.src = `https://player.twitch.tv/?channel=${canal}&parent=dandarth.github.io&muted=true`;
     iframe.width = "100%";
-    iframe.height = "400"; // 🔥 Ajustando altura para exibir avisos corretamente
+    iframe.height = "400"; // 🔥 Ajustando altura do player
     iframe.allowFullscreen = true;
 
     let chatIframe = document.createElement("iframe");
@@ -58,7 +52,7 @@ document.getElementById("channelName").addEventListener("keypress", function(eve
     }
 });
 
-// 🔥 Corrigindo o botão "Adicionar Stream"
+// 🔥 Botão de Adicionar Stream ajustado
 document.querySelector("button[onclick='addStream()']").addEventListener("click", function() {
     addStream();
 });
@@ -86,9 +80,10 @@ function toggleChat() {
     }
 }
 
+// 🔹 Adicionar um canal favorito manualmente e salvar no Local Storage
 function addFavoriteChannel() {
     let canal = document.getElementById("favoriteChannel").value.trim();
-    
+
     if (!canal) {
         alert("Por favor, insira um nome de canal válido!");
         return;
@@ -96,12 +91,17 @@ function addFavoriteChannel() {
 
     // 🔥 Adiciona o canal na lista de favoritos
     canaisFavoritos.push(canal);
-    
+
     // 🛠 Salva a lista no Local Storage
     localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
 
     alert(`Canal ${canal} adicionado aos favoritos!`);
+
+    // 🔥 Atualiza a lista na tela automaticamente
+    carregarFavoritos();
+
     document.getElementById("favoriteChannel").value = ""; // 🔥 Limpa o campo após adicionar
 }
 
+// 🔥 Recarrega os canais favoritos ao carregar a página
 window.onload = carregarFavoritos;
