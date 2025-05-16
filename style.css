@@ -37,29 +37,22 @@ h1 {
 }
 
 .chat-sidebar {
-    overflow-y: auto;
-    max-height: 100vh;
     position: fixed;
+    top: 0;
     right: 0;
     width: 300px;
     height: 100vh;
     background-color: #1a1a1a;
     padding: 10px;
     border-left: 2px solid #ffffff;
-    display: flex;
-    flex-direction: column;
-    overflow-y: hidden;
-    transition: transform 0.3s ease-in-out;
-    transform: translateX(0px);
+    overflow-y: auto;
+    z-index: 1000;
 }
 
 #chatContainer {
-    flex: 1;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 100%;
 }
 
 #toggleChatButton {
