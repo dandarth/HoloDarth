@@ -190,3 +190,4 @@ window.addEventListener("DOMContentLoaded", function () {
 window.addStream = addStream;
 window.carregarCanaisFavoritos = carregarCanaisFavoritos;
 window.carregarEquipeTwitchPorTags = carregarEquipeTwitchPorTags;
+window.toggleChat = toggleChat;
