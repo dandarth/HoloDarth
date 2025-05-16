@@ -1,4 +1,4 @@
-/* 🔥 Garantindo fundo escuro */
+
 html, body {
     background-color: #121212 !important;
     color: white;
@@ -36,9 +36,8 @@ h1 {
     width: calc(100% / 4 - 8px);
 }
 
-/* 🔥 Posicionando corretamente o chat */
 .chat-sidebar {
-    overflow-y: auto; /* 🔥 Permite rolagem quando há muitos chats */
+    overflow-y: auto;
     max-height: 100vh;
     position: fixed;
     right: 0;
@@ -54,13 +53,11 @@ h1 {
 }
 
 #chatContainer {
-    position: fixed;
-    top: 10px;
-    right: 10px; /* 🔥 Garante que o chat fique na lateral direita */
-    width: 300px;
-    height: 500px;
-    background-color: #1a1a1a;
-    z-index: 1000; /* 🔥 Mantém sobre outros elementos */
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #toggleChatButton {
@@ -72,7 +69,6 @@ h1 {
     border-radius: 5px;
 }
 
-/* 🔥 Estilização do botão de remover live */
 .remove-stream-btn {
     margin-top: 10px;
     padding: 8px;
