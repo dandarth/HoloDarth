@@ -187,6 +187,6 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 
 // Expõe as funções globais para uso no HTML
-window.carregarEquipeTwitchPorTags = carregarEquipeTwitchPorTags;
-window.carregarCanaisFavoritos = carregarCanaisFavoritos;
 window.addStream = addStream;
+window.carregarCanaisFavoritos = carregarCanaisFavoritos;
+window.carregarEquipeTwitchPorTags = carregarEquipeTwitchPorTags;
