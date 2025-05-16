@@ -92,7 +92,6 @@ function toggleChat() {
     }
 }
 
-// Busca membros da equipe (pode exigir endpoint alternativo ou lista manual dependendo da resposta da API Twitch)
 async function getTeamMembers(teamName) {
     const url = `https://api.twitch.tv/helix/teams?name=${teamName}`;
 
@@ -138,7 +137,8 @@ async function checkTeamsAndAddStreams() {
         const teams = data.equipes;
 
         for (const team of teams) {
-            const membros = await getTeamMembers(team);
+            const cleanTeam = team.startsWith("@") ? team.substring(1) : team;
+            const membros = await getTeamMembers(cleanTeam);
 
             for (const member of membros) {
                 const online = await isChannelOnline(member);
@@ -156,7 +156,6 @@ async function checkTeamsAndAddStreams() {
     }
 }
 
-// Inicialização segura com DOM carregado
 window.addEventListener("DOMContentLoaded", function () {
     carregarFavoritos();
 
