@@ -40,9 +40,9 @@ function addStream(canal) {
 
     let removeButton = document.createElement("button");
     removeButton.innerText = "Remover Live";
-    removeButton.classList.add("remove-stream-btn"); // 🔥 Adicionando classe para estilização
+    removeButton.classList.add("remove-stream-btn"); 
     removeButton.onclick = function() {
-        removerStream(div);
+        removerStream(div, canal);
     };
 
     div.appendChild(iframe);
@@ -53,9 +53,14 @@ function addStream(canal) {
     document.getElementById('channelName').value = "";
 }
 
-// 🔹 Função para remover a live da tela, mantendo na lista de favoritos
-function removerStream(streamDiv) {
-    streamDiv.remove(); // 🔥 Apenas remove a live exibida, sem alterar favoritos
+// 🔹 Função para remover a live da tela e o chat correspondente
+function removerStream(streamDiv, canal) {
+    streamDiv.remove(); // 🔥 Remove a live da tela
+
+    let chatIframe = document.querySelector(`#chatContainer iframe[src*="${canal}"]`);
+    if (chatIframe) {
+        chatIframe.remove(); // 🔥 Remove o chat da live fechada
+    }
 }
 
 // 🔹 Adicionar um canal favorito manualmente e salvar no Local Storage
@@ -67,7 +72,6 @@ function addFavoriteChannel() {
         return;
     }
 
-    // 🔥 Evita duplicação de favoritos
     if (!canaisFavoritos.includes(canal)) {
         canaisFavoritos.push(canal);
         localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
@@ -76,10 +80,16 @@ function addFavoriteChannel() {
         alert("Esse canal já está nos favoritos!");
     }
 
-    // 🔥 Atualiza a lista na tela automaticamente
     carregarFavoritos();
-    document.getElementById("favoriteChannel").value = ""; // 🔥 Limpa o campo após adicionar
+    document.getElementById("favoriteChannel").value = "";
 }
 
 // 🔥 Recarrega os canais favoritos ao carregar a página
 window.onload = carregarFavoritos;
+
+// 🔥 Permitir que "Enter" adicione uma live automaticamente
+document.getElementById("channelName").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        addStream(document.getElementById("channelName").value.trim());
+    }
+});

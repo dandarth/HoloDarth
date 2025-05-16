@@ -8,17 +8,19 @@
 </head>
 <body>
 
-    <!-- 🔥 Movendo o chat para o topo -->
-    <div id="chatContainer"></div>
-    <button id="toggleChatButton" onclick="toggleChat()">Ocultar Chat</button>
-
     <div class="main-container">
         <h1>Holonet Darth</h1>
         <input type="text" id="channelName" placeholder="Digite o nome do canal">
         <button onclick="addStream()">Adicionar Stream</button>
         <button onclick="carregarFavoritos()">Carregar Canais Favoritos</button>
         <button onclick="carregarEquipe()">Carregar Equipe Twitch</button>
+        <button id="toggleChatButton" onclick="toggleChat()">Ocultar Chat</button> <!-- 🔥 Botão movido para o menu -->
         <div class="container" id="streamsContainer"></div>
+    </div>
+
+    <!-- 🔥 Movendo o chat para o topo -->
+    <div class="chat-sidebar" id="chatSidebar">
+        <div id="chatContainer"></div>
     </div>
 
     <script src="scripts.js"></script>
