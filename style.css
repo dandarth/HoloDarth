@@ -48,6 +48,7 @@ h1 {
     border-left: 2px solid #ffffff;
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
     transition: transform 0.3s ease-in-out;
     transform: translateX(0px);
 }
