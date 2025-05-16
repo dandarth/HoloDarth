@@ -22,6 +22,14 @@ function addStream(canal) {
         return;
     }
 
+    // Evita adicionar canal duplicado na tela
+    if (canaisFavoritos.includes(canal)) {
+        return;
+    }
+
+    canaisFavoritos.push(canal);
+    localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
+
     let div = document.createElement("div");
     div.classList.add("stream-container");
 
@@ -61,39 +69,15 @@ function removerStream(streamDiv, canal) {
     if (chatIframe) {
         chatIframe.remove();
     }
+
+    // Remove do favoritos também
+    canaisFavoritos = canaisFavoritos.filter(c => c !== canal);
+    localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
 }
 
-function addFavoriteChannel() {
-    let canal = document.getElementById("favoriteChannel").value.trim();
-
-    if (!canal) {
-        alert("Por favor, insira um nome de canal válido!");
-        return;
-    }
-
-    if (!canaisFavoritos.includes(canal)) {
-        canaisFavoritos.push(canal);
-        localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
-        alert(`Canal ${canal} adicionado aos favoritos!`);
-    } else {
-        alert("Esse canal já está nos favoritos!");
-    }
-
-    carregarFavoritos();
-    document.getElementById("favoriteChannel").value = "";
-}
-
-function toggleChat() {
-    const chatSidebar = document.getElementById("chatSidebar");
-    if (chatSidebar.style.display === "none") {
-        chatSidebar.style.display = "flex";
-    } else {
-        chatSidebar.style.display = "none";
-    }
-}
-
-async function getTeamMembers(teamName) {
-    const url = `https://api.twitch.tv/helix/teams?name=${teamName}`;
+async function buscarStreamsPorTag(tag) {
+    const query = encodeURIComponent(tag);
+    const url = `https://api.twitch.tv/helix/search/channels?query=${query}&live_only=true`;
 
     try {
         const response = await fetch(url, {
@@ -104,59 +88,29 @@ async function getTeamMembers(teamName) {
         });
 
         const data = await response.json();
-        return data.data?.[0]?.users?.map(user => user.user_login) || [];
+
+        if (!data.data) return [];
+
+        // Filtra canais que tem o tag no título da live
+        return data.data
+            .filter(channel => channel.is_live && channel.title.includes(tag))
+            .map(channel => channel.broadcaster_login);
+
     } catch (err) {
-        console.error('Erro ao buscar membros da equipe:', err);
+        console.error("Erro ao buscar streams por tag:", err);
         return [];
     }
 }
 
-async function isChannelOnline(channelName) {
-    const url = `https://api.twitch.tv/helix/streams?user_login=${channelName}`;
+async function atualizarStreamsPorTag(tag) {
+    const canais = await buscarStreamsPorTag(tag);
 
-    try {
-        const response = await fetch(url, {
-            headers: {
-                "Client-ID": clientId,
-                "Authorization": `Bearer ${accessToken}`
-            }
-        });
-
-        const data = await response.json();
-        return data.data && data.data.length > 0;
-    } catch (err) {
-        console.error('Erro ao checar status do canal:', err);
-        return false;
-    }
-}
-
-async function checkTeamsAndAddStreams() {
-    try {
-        const response = await fetch('equipes.json');
-        const data = await response.json();
-        const teams = data.equipes;
-
-        for (const team of teams) {
-            const cleanTeam = team.startsWith("@") ? team.substring(1) : team;
-            const membros = await getTeamMembers(cleanTeam);
-
-            for (const member of membros) {
-                const online = await isChannelOnline(member);
-                if (online) {
-                    if (!canaisFavoritos.includes(member)) {
-                        canaisFavoritos.push(member);
-                        localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
-                    }
-                    addStream(member);
-                }
-            }
+    canais.forEach(canal => {
+        if (!canaisFavoritos.includes(canal)) {
+            addStream(canal);
         }
-    } catch (err) {
-        console.error('Erro ao carregar equipes e adicionar streams:', err);
-    }
+    });
 }
-window.carregarFavoritos = carregarFavoritos;
-window.addStream = addStream;
 
 window.addEventListener("DOMContentLoaded", function () {
     carregarFavoritos();
@@ -167,6 +121,8 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    checkTeamsAndAddStreams();
-    setInterval(checkTeamsAndAddStreams, 5 * 60 * 1000); // a cada 5 minutos
+    const tagEquipe = "@raiderscompany"; // Mude aqui para a tag desejada
+
+    atualizarStreamsPorTag(tagEquipe);
+    setInterval(() => atualizarStreamsPorTag(tagEquipe), 5 * 60 * 1000); // Atualiza a cada 5 minutos
 });
