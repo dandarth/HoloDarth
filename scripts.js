@@ -57,13 +57,15 @@ function addStream(canal) {
 function removerStream(streamDiv, canal) {
     streamDiv.remove();
 
-    const chatIframes = document.querySelectorAll(`#chatContainer iframe`);
-    chatIframes.forEach((iframe) => {
-        if (iframe.src.includes(canal)) {
-            iframe.remove();
-        }
-    });
+    // Busca apenas o iframe do chat que contenha exatamente o canal no src
+    const chatIframe = Array.from(document.querySelectorAll('#chatContainer iframe'))
+        .find(iframe => iframe.src.includes(`/${canal}/chat`));
+
+    if (chatIframe) {
+        chatIframe.remove();
+    }
 }
+
 
 function addFavoriteChannel() {
     let canal = document.getElementById("favoriteChannel").value.trim();
