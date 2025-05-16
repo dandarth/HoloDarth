@@ -55,4 +55,117 @@ function addStream(canal) {
 function removerStream(streamDiv, canal) {
     streamDiv.remove();
 
-    const chat
+    const chatIframe = Array.from(document.querySelectorAll('#chatContainer iframe'))
+        .find(iframe => iframe.src.includes(`/${canal}/chat`));
+
+    if (chatIframe) {
+        chatIframe.remove();
+    }
+}
+
+function addFavoriteChannel() {
+    let canal = document.getElementById("favoriteChannel").value.trim();
+
+    if (!canal) {
+        alert("Por favor, insira um nome de canal válido!");
+        return;
+    }
+
+    if (!canaisFavoritos.includes(canal)) {
+        canaisFavoritos.push(canal);
+        localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
+        alert(`Canal ${canal} adicionado aos favoritos!`);
+    } else {
+        alert("Esse canal já está nos favoritos!");
+    }
+
+    carregarFavoritos();
+    document.getElementById("favoriteChannel").value = "";
+}
+
+function toggleChat() {
+    const chatSidebar = document.getElementById("chatSidebar");
+    if (chatSidebar.style.display === "none") {
+        chatSidebar.style.display = "flex";
+    } else {
+        chatSidebar.style.display = "none";
+    }
+}
+
+// Busca membros da equipe (pode exigir endpoint alternativo ou lista manual dependendo da resposta da API Twitch)
+async function getTeamMembers(teamName) {
+    const url = `https://api.twitch.tv/helix/teams?name=${teamName}`;
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                "Client-ID": clientId,
+                "Authorization": `Bearer ${accessToken}`
+            }
+        });
+
+        const data = await response.json();
+        return data.data?.[0]?.users?.map(user => user.user_login) || [];
+    } catch (err) {
+        console.error('Erro ao buscar membros da equipe:', err);
+        return [];
+    }
+}
+
+async function isChannelOnline(channelName) {
+    const url = `https://api.twitch.tv/helix/streams?user_login=${channelName}`;
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                "Client-ID": clientId,
+                "Authorization": `Bearer ${accessToken}`
+            }
+        });
+
+        const data = await response.json();
+        return data.data && data.data.length > 0;
+    } catch (err) {
+        console.error('Erro ao checar status do canal:', err);
+        return false;
+    }
+}
+
+async function checkTeamsAndAddStreams() {
+    try {
+        const response = await fetch('equipes.json');
+        const data = await response.json();
+        const teams = data.equipes;
+
+        for (const team of teams) {
+            const membros = await getTeamMembers(team);
+
+            for (const member of membros) {
+                const online = await isChannelOnline(member);
+                if (online) {
+                    if (!canaisFavoritos.includes(member)) {
+                        canaisFavoritos.push(member);
+                        localStorage.setItem("canaisFavoritos", JSON.stringify(canaisFavoritos));
+                    }
+                    addStream(member);
+                }
+            }
+        }
+    } catch (err) {
+        console.error('Erro ao carregar equipes e adicionar streams:', err);
+    }
+}
+
+// Inicialização segura com DOM carregado
+window.addEventListener("DOMContentLoaded", function () {
+    carregarFavoritos();
+
+    document.getElementById("channelName").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            addStream(document.getElementById("channelName").value.trim());
+        }
+    });
+
+    checkTeamsAndAddStreams();
+    setInterval(checkTeamsAndAddStreams, 5 * 60 * 1000); // a cada 5 minutos
+});
