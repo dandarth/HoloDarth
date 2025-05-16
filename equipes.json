@@ -1,7 +1,7 @@
 {
   "equipes": [
-    "raiderscompany",
-    "outraequipe",
-    "maisumtime"
+    "@raiderscompany",
+    "@equipealcance",
+    "@boostteam_"
   ]
 }
