@@ -155,6 +155,8 @@ async function checkTeamsAndAddStreams() {
         console.error('Erro ao carregar equipes e adicionar streams:', err);
     }
 }
+window.carregarFavoritos = carregarFavoritos;
+window.addStream = addStream;
 
 window.addEventListener("DOMContentLoaded", function () {
     carregarFavoritos();
